@@ -1,17 +1,21 @@
+import { useState } from 'react';
+
 import EmailBody from './component/EmailBody';
 import EmailList from './component/EmailList';
 import Filter from './component/Filter';
 
-function App() {
+const App = () => {
+    const [emailId, setEmailId] = useState();
+
     return (
         <>
             <Filter />
             <main className="App">
-                <EmailList />
-                <EmailBody />
+                <EmailList setEmailId={setEmailId} />
+                <EmailBody emailId={emailId} />
             </main>
         </>
     );
-}
+};
 
 export default App;
