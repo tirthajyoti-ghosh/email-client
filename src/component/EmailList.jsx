@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-// eslint-disable-next-line react/prop-types
-const EmailList = ({ setEmailId }) => {
-    const [emails, setEmails] = useState([]);
+import { addEmails, addEmailId } from '../redux/actions/emails';
 
+const EmailList = ({ emails, dispatchAddEmails, dispatchAddEmailId }) => {
     useEffect(() => {
-        fetch('https://flipkart-email-mock.vercel.app/')
-            .then((response) => response.json())
-            .then((data) => setEmails(data.list));
+        const fetchEmails = async () => {
+            const response = await fetch('https://flipkart-email-mock.vercel.app/');
+            const data = await response.json();
+            dispatchAddEmails(data.list);
+        };
+
+        fetchEmails();
     }, []);
 
     return (
@@ -19,8 +24,8 @@ const EmailList = ({ setEmailId }) => {
                             key={item.id}
                             role="menuitem"
                             className="email-list__item"
-                            onClick={() => setEmailId(item.id)}
-                            onKeyPress={() => setEmailId(item.id)}
+                            onClick={() => dispatchAddEmailId(item.id)}
+                            onKeyPress={() => dispatchAddEmailId(item.id)}
                         >
                             <img src={`https://avatars.dicebear.com/api/initials/${item.from.email}.svg`} alt={item.from.email} />
                             <div className="email-list__item__details">
@@ -52,4 +57,30 @@ const EmailList = ({ setEmailId }) => {
     );
 };
 
-export default EmailList;
+EmailList.propTypes = {
+    emails: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        from: PropTypes.shape({
+            email: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+        }).isRequired,
+        date: PropTypes.string.isRequired,
+        subject: PropTypes.string.isRequired,
+        short_description: PropTypes.string.isRequired,
+        // isRead: PropTypes.bool.isRequired,
+        // isFavorite: PropTypes.bool.isRequired,
+    }).isRequired).isRequired,
+    dispatchAddEmails: PropTypes.func.isRequired,
+    dispatchAddEmailId: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = (dispatch) => ({
+    dispatchAddEmails: (emails) => dispatch(addEmails(emails)),
+    dispatchAddEmailId: (emailId) => dispatch(addEmailId(emailId)),
+});
+
+const mapStateToProps = (state) => ({
+    emails: state.emails,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(EmailList);

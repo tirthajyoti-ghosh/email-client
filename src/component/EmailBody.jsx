@@ -1,19 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import DOMPurify from 'dompurify';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-// eslint-disable-next-line react/prop-types
-const EmailBody = ({ emailId }) => {
-    const [email, setEmail] = useState({});
+import { addEmailBody } from '../redux/actions/emails';
 
+const EmailBody = ({ selectedEmailId, currentEmailBody, dispatchAddEmailBody }) => {
     useEffect(() => {
-        if (emailId) {
-            fetch(`https://flipkart-email-mock.vercel.app/?id=${emailId}`)
-                .then((response) => response.json())
-                .then((data) => setEmail(data));
-        }
-    }, [emailId]);
+        const fetchEmailBody = async () => {
+            const response = await fetch(`https://flipkart-email-mock.vercel.app/?id=${selectedEmailId}`);
+            const data = await response.json();
+            dispatchAddEmailBody(data);
+        };
 
-    return !email.body ? 'Loading...' : (
+        if (selectedEmailId) {
+            fetchEmailBody();
+        }
+    }, [selectedEmailId]);
+
+    return !currentEmailBody.body ? 'Loading...' : (
         <section className="email-body">
             <img
                 src="https://avatars.dicebear.com/api/initials/careers@flipkart.com.svg"
@@ -28,9 +33,12 @@ const EmailBody = ({ emailId }) => {
 
                 <div
                     className="email-body__description"
+                    // eslint-disable-next-line react/no-danger
                     dangerouslySetInnerHTML={{
-                        __html: DOMPurify.sanitize(email.body,
-                            { USE_PROFILES: { html: true } }),
+                        __html: DOMPurify.sanitize(
+                            currentEmailBody.body,
+                            { USE_PROFILES: { html: true } },
+                        ),
                     }}
                 />
             </div>
@@ -38,4 +46,29 @@ const EmailBody = ({ emailId }) => {
     );
 };
 
-export default EmailBody;
+EmailBody.propTypes = {
+    selectedEmailId: PropTypes.string.isRequired,
+    dispatchAddEmailBody: PropTypes.func.isRequired,
+    currentEmailBody: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        // from: PropTypes.shape({
+        //     email: PropTypes.string.isRequired,
+        //     name: PropTypes.string.isRequired,
+        // }).isRequired,
+        // date: PropTypes.string.isRequired,
+        // subject: PropTypes.string.isRequired,
+        body: PropTypes.string.isRequired,
+        // isFavorite: PropTypes.bool.isRequired,
+    }).isRequired,
+};
+
+const mapDispatchToProps = (dispatch) => ({
+    dispatchAddEmailBody: (emailBody) => dispatch(addEmailBody(emailBody)),
+});
+
+const mapStateToProps = (state) => ({
+    selectedEmailId: state.selectedEmailId,
+    currentEmailBody: state.currentEmailBody,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(EmailBody);
