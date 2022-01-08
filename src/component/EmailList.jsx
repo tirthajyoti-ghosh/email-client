@@ -3,22 +3,35 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { addEmails, addEmailId, addEmailBody } from '../redux/actions/emails';
-import { parseDate } from '../utils/general';
+import { addAdditionalProperties, markEmailAsRead, parseDate } from '../utils/general';
 
 const EmailList = ({
-    emails, dispatchAddEmails, dispatchAddEmailId, dispatchAddEmailBody,
+    emails,
+    dispatchAddEmails,
+    dispatchAddEmailId,
+    dispatchAddEmailBody,
 }) => {
     useEffect(() => {
         const fetchEmails = async () => {
             const response = await fetch('https://flipkart-email-mock.vercel.app/');
             const data = await response.json();
-            dispatchAddEmails(data.list);
+            const newData = addAdditionalProperties(
+                data.list,
+                {
+                    isRead: false,
+                    isFavorite: false,
+                },
+            );
+            dispatchAddEmails(newData);
         };
 
         fetchEmails();
     }, []);
 
     const handleEmailInteraction = (item) => {
+        const newEmails = markEmailAsRead(emails, item.id);
+        dispatchAddEmails(newEmails);
+
         dispatchAddEmailId(item.id);
         dispatchAddEmailBody(item);
     };
@@ -34,6 +47,7 @@ const EmailList = ({
                             className="email-list__item"
                             onClick={() => handleEmailInteraction(item)}
                             onKeyPress={() => handleEmailInteraction(item)}
+                            style={{ backgroundColor: item.isRead ? '#88ce9f' : '#e54848' }}
                         >
                             <img src={`https://avatars.dicebear.com/api/initials/${item.from.email}.svg`} alt={item.from.email} />
                             <div className="email-list__item__details">
@@ -55,7 +69,7 @@ const EmailList = ({
                                 </p>
                                 <p>{item.short_description}</p>
                                 <time>{parseDate(item.date)}</time>
-                                <span className="favorite">Favorite</span>
+                                {item.isFavorite && <span className="favorite">Favorite</span>}
                             </div>
                         </li>
                     ))
@@ -75,8 +89,8 @@ EmailList.propTypes = {
         date: PropTypes.number.isRequired,
         subject: PropTypes.string.isRequired,
         short_description: PropTypes.string.isRequired,
-        // isRead: PropTypes.bool.isRequired,
-        // isFavorite: PropTypes.bool.isRequired,
+        isRead: PropTypes.bool.isRequired,
+        isFavorite: PropTypes.bool.isRequired,
     }).isRequired).isRequired,
     dispatchAddEmails: PropTypes.func.isRequired,
     dispatchAddEmailId: PropTypes.func.isRequired,
