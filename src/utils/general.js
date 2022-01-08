@@ -17,6 +17,14 @@ export const markEmailAsRead = (emails, emailId) => {
     return newEmails;
 };
 
+export const toggleFavoriteStatus = (emails, emailId) => {
+    const emailIndex = emails.findIndex((email) => email.id === emailId);
+    const newEmails = [...emails];
+    newEmails[emailIndex].isFavorite = !newEmails[emailIndex].isFavorite;
+
+    return newEmails;
+};
+
 export const addAdditionalProperties = (arr = [], obj = {}) => {
     const newArr = [...arr];
 

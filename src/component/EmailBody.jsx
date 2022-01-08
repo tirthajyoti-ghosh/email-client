@@ -3,10 +3,12 @@ import DOMPurify from 'dompurify';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { addEmailBody } from '../redux/actions/emails';
-import { parseDate } from '../utils/general';
+import { addEmails, addEmailBody } from '../redux/actions/emails';
+import { parseDate, toggleFavoriteStatus } from '../utils/general';
 
-const EmailBody = ({ selectedEmailId, currentEmailBody, dispatchAddEmailBody }) => {
+const EmailBody = ({
+    emails, selectedEmailId, currentEmailBody, dispatchAddEmailBody, dispatchAddEmails,
+}) => {
     useEffect(() => {
         const fetchEmailBody = async () => {
             const response = await fetch(`https://flipkart-email-mock.vercel.app/?id=${selectedEmailId}`);
@@ -19,6 +21,12 @@ const EmailBody = ({ selectedEmailId, currentEmailBody, dispatchAddEmailBody }) 
         }
     }, [selectedEmailId]);
 
+    const toggleFavorite = () => {
+        const newEmails = toggleFavoriteStatus(emails, selectedEmailId);
+        dispatchAddEmails(newEmails);
+        dispatchAddEmailBody({ isFavorite: !currentEmailBody.isFavorite });
+    };
+
     return !currentEmailBody.body ? 'Loading...' : (
         <section className="email-body">
             <img
@@ -26,7 +34,7 @@ const EmailBody = ({ selectedEmailId, currentEmailBody, dispatchAddEmailBody }) 
                 alt={currentEmailBody.from.email}
             />
             <div className="email-body__details">
-                <button type="button" className="mark-favorite-btn">
+                <button type="button" className="mark-favorite-btn" onClick={() => toggleFavorite()}>
                     Mark as favorite
                 </button>
                 <h1>{currentEmailBody.subject}</h1>
@@ -50,6 +58,7 @@ const EmailBody = ({ selectedEmailId, currentEmailBody, dispatchAddEmailBody }) 
 EmailBody.propTypes = {
     selectedEmailId: PropTypes.string.isRequired,
     dispatchAddEmailBody: PropTypes.func.isRequired,
+    dispatchAddEmails: PropTypes.func.isRequired,
     currentEmailBody: PropTypes.shape({
         id: PropTypes.string,
         from: PropTypes.shape({
@@ -59,15 +68,29 @@ EmailBody.propTypes = {
         date: PropTypes.number,
         subject: PropTypes.string,
         body: PropTypes.string,
-        // isFavorite: PropTypes.bool.isRequired,
+        isFavorite: PropTypes.bool,
     }).isRequired,
+    emails: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        from: PropTypes.shape({
+            email: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+        }).isRequired,
+        date: PropTypes.number.isRequired,
+        subject: PropTypes.string.isRequired,
+        short_description: PropTypes.string.isRequired,
+        isRead: PropTypes.bool.isRequired,
+        isFavorite: PropTypes.bool.isRequired,
+    }).isRequired).isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
     dispatchAddEmailBody: (emailBody) => dispatch(addEmailBody(emailBody)),
+    dispatchAddEmails: (emails) => dispatch(addEmails(emails)),
 });
 
 const mapStateToProps = (state) => ({
+    emails: state.emails,
     selectedEmailId: state.selectedEmailId,
     currentEmailBody: state.currentEmailBody,
 });
