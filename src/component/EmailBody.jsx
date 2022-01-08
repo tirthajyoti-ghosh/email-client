@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { addEmailBody } from '../redux/actions/emails';
+import { parseDate } from '../utils/general';
 
 const EmailBody = ({ selectedEmailId, currentEmailBody, dispatchAddEmailBody }) => {
     useEffect(() => {
@@ -21,15 +22,15 @@ const EmailBody = ({ selectedEmailId, currentEmailBody, dispatchAddEmailBody }) 
     return !currentEmailBody.body ? 'Loading...' : (
         <section className="email-body">
             <img
-                src="https://avatars.dicebear.com/api/initials/careers@flipkart.com.svg"
-                alt="careers@flipkart.com"
+                src={`https://avatars.dicebear.com/api/initials/${currentEmailBody.from.email}.svg`}
+                alt={currentEmailBody.from.email}
             />
             <div className="email-body__details">
                 <button type="button" className="mark-favorite-btn">
                     Mark as favorite
                 </button>
-                <h1>Lorem ipsum</h1>
-                <time>26/02/2020 06:56 pm</time>
+                <h1>{currentEmailBody.subject}</h1>
+                <time>{parseDate(currentEmailBody.date)}</time>
 
                 <div
                     className="email-body__description"
@@ -50,14 +51,14 @@ EmailBody.propTypes = {
     selectedEmailId: PropTypes.string.isRequired,
     dispatchAddEmailBody: PropTypes.func.isRequired,
     currentEmailBody: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        // from: PropTypes.shape({
-        //     email: PropTypes.string.isRequired,
-        //     name: PropTypes.string.isRequired,
-        // }).isRequired,
-        // date: PropTypes.string.isRequired,
-        // subject: PropTypes.string.isRequired,
-        body: PropTypes.string.isRequired,
+        id: PropTypes.string,
+        from: PropTypes.shape({
+            email: PropTypes.string,
+            name: PropTypes.string,
+        }),
+        date: PropTypes.number,
+        subject: PropTypes.string,
+        body: PropTypes.string,
         // isFavorite: PropTypes.bool.isRequired,
     }).isRequired,
 };

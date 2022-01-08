@@ -2,9 +2,12 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { addEmails, addEmailId } from '../redux/actions/emails';
+import { addEmails, addEmailId, addEmailBody } from '../redux/actions/emails';
+import { parseDate } from '../utils/general';
 
-const EmailList = ({ emails, dispatchAddEmails, dispatchAddEmailId }) => {
+const EmailList = ({
+    emails, dispatchAddEmails, dispatchAddEmailId, dispatchAddEmailBody,
+}) => {
     useEffect(() => {
         const fetchEmails = async () => {
             const response = await fetch('https://flipkart-email-mock.vercel.app/');
@@ -15,6 +18,11 @@ const EmailList = ({ emails, dispatchAddEmails, dispatchAddEmailId }) => {
         fetchEmails();
     }, []);
 
+    const handleEmailInteraction = (item) => {
+        dispatchAddEmailId(item.id);
+        dispatchAddEmailBody(item);
+    };
+
     return (
         <section className="email-list">
             <ul>
@@ -24,8 +32,8 @@ const EmailList = ({ emails, dispatchAddEmails, dispatchAddEmailId }) => {
                             key={item.id}
                             role="menuitem"
                             className="email-list__item"
-                            onClick={() => dispatchAddEmailId(item.id)}
-                            onKeyPress={() => dispatchAddEmailId(item.id)}
+                            onClick={() => handleEmailInteraction(item)}
+                            onKeyPress={() => handleEmailInteraction(item)}
                         >
                             <img src={`https://avatars.dicebear.com/api/initials/${item.from.email}.svg`} alt={item.from.email} />
                             <div className="email-list__item__details">
@@ -46,7 +54,7 @@ const EmailList = ({ emails, dispatchAddEmails, dispatchAddEmailId }) => {
                                     <strong>{item.subject}</strong>
                                 </p>
                                 <p>{item.short_description}</p>
-                                <time>{new Date(item.date).toLocaleString()}</time>
+                                <time>{parseDate(item.date)}</time>
                                 <span className="favorite">Favorite</span>
                             </div>
                         </li>
@@ -64,7 +72,7 @@ EmailList.propTypes = {
             email: PropTypes.string.isRequired,
             name: PropTypes.string.isRequired,
         }).isRequired,
-        date: PropTypes.string.isRequired,
+        date: PropTypes.number.isRequired,
         subject: PropTypes.string.isRequired,
         short_description: PropTypes.string.isRequired,
         // isRead: PropTypes.bool.isRequired,
@@ -72,11 +80,13 @@ EmailList.propTypes = {
     }).isRequired).isRequired,
     dispatchAddEmails: PropTypes.func.isRequired,
     dispatchAddEmailId: PropTypes.func.isRequired,
+    dispatchAddEmailBody: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
     dispatchAddEmails: (emails) => dispatch(addEmails(emails)),
     dispatchAddEmailId: (emailId) => dispatch(addEmailId(emailId)),
+    dispatchAddEmailBody: (emailBody) => dispatch(addEmailBody(emailBody)),
 });
 
 const mapStateToProps = (state) => ({
