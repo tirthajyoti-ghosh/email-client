@@ -1,0 +1,12 @@
+.avatar {
+    display: inline-block;
+    margin-right: 20px;
+    min-width: 3.7rem;
+    max-height: 3.7rem;
+    text-align: center;
+    padding-top: 0.98rem;
+    background: #e54065;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 1.4rem;
+}
