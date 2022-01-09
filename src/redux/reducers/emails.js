@@ -30,8 +30,18 @@ const currentEmailBody = (state = {}, action) => {
     }
 };
 
+const isEmailBodyOpen = (state = false, action) => {
+    switch (action.type) {
+    case 'OPEN_EMAIL_BODY':
+        return true;
+    default:
+        return state;
+    }
+};
+
 export default combineReducers({
     emails,
     selectedEmailId,
+    isEmailBodyOpen,
     currentEmailBody,
 });

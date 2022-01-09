@@ -12,3 +12,7 @@ export const addEmailBody = (emailBody) => ({
     type: 'ADD_EMAIL_BODY',
     emailBody,
 });
+
+export const openEmailBody = () => ({
+    type: 'OPEN_EMAIL_BODY',
+});

@@ -10,6 +10,7 @@ import reducer from './redux/reducers/emails';
 const initialState = {
     emails: [],
     selectedEmailId: '',
+    isEmailBodyOpen: false,
     currentEmailBody: {},
 };
 

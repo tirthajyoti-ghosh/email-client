@@ -11,7 +11,12 @@ import Avatar from '../Avatar';
 import './style.css';
 
 const EmailBody = ({
-    emails, selectedEmailId, currentEmailBody, dispatchAddEmailBody, dispatchAddEmails,
+    emails,
+    selectedEmailId,
+    isEmailBodyOpen,
+    currentEmailBody,
+    dispatchAddEmailBody,
+    dispatchAddEmails,
 }) => {
     useEffect(() => {
         const fetchEmailBody = async () => {
@@ -31,43 +36,48 @@ const EmailBody = ({
         dispatchAddEmailBody({ isFavorite: !currentEmailBody.isFavorite });
     };
 
-    return !currentEmailBody.body ? 'Loading...' : (
-        <section className="email-body">
+    return isEmailBodyOpen ? (
+        <section className={`email-body ${isEmailBodyOpen ? 'email-body-open' : ''}`}>
             <div className="container">
-                <Avatar name={currentEmailBody.from.name} />
-                <div className="email-body__details">
-                    {
-                        currentEmailBody.isFavorite
-                            ? <span className="mark-favorite__text">Marked as favorite</span>
-                            : (
-                                <button type="button" className="mark-favorite__btn" onClick={toggleFavorite}>
-                                    Mark as favorite
-                                </button>
-                            )
-                    }
-                    <h1>{currentEmailBody.subject}</h1>
-                    <time>{parseDate(currentEmailBody.date)}</time>
+                {!currentEmailBody.body ? 'Loading...' : (
+                    <>
+                        <Avatar name={currentEmailBody.from.name} />
+                        <div className="email-body__details">
+                            {
+                                currentEmailBody.isFavorite
+                                    ? <span className="mark-favorite__text">Marked as favorite</span>
+                                    : (
+                                        <button type="button" className="mark-favorite__btn" onClick={toggleFavorite}>
+                                            Mark as favorite
+                                        </button>
+                                    )
+                            }
+                            <h1>{currentEmailBody.subject}</h1>
+                            <time>{parseDate(currentEmailBody.date)}</time>
 
-                    <div
-                        className="email-body__description"
-                        // eslint-disable-next-line react/no-danger
-                        dangerouslySetInnerHTML={{
-                            __html: DOMPurify.sanitize(
-                                currentEmailBody.body,
-                                { USE_PROFILES: { html: true } },
-                            ),
-                        }}
-                    />
-                </div>
+                            <div
+                                className="email-body__description"
+                                // eslint-disable-next-line react/no-danger
+                                dangerouslySetInnerHTML={{
+                                    __html: DOMPurify.sanitize(
+                                        currentEmailBody.body,
+                                        { USE_PROFILES: { html: true } },
+                                    ),
+                                }}
+                            />
+                        </div>
+                    </>
+                )}
             </div>
         </section>
-    );
+    ) : null;
 };
 
 EmailBody.propTypes = {
     selectedEmailId: PropTypes.string.isRequired,
     dispatchAddEmailBody: PropTypes.func.isRequired,
     dispatchAddEmails: PropTypes.func.isRequired,
+    isEmailBodyOpen: PropTypes.bool.isRequired,
     currentEmailBody: PropTypes.shape({
         id: PropTypes.string,
         from: PropTypes.shape({
@@ -101,6 +111,7 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => ({
     emails: state.emails,
     selectedEmailId: state.selectedEmailId,
+    isEmailBodyOpen: state.isEmailBodyOpen,
     currentEmailBody: state.currentEmailBody,
 });
 

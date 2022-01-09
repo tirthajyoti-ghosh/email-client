@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { addEmails, addEmailId, addEmailBody } from '../../redux/actions/emails';
+import {
+    addEmails, addEmailId, addEmailBody, openEmailBody,
+} from '../../redux/actions/emails';
 import { addAdditionalProperties, markEmailAsRead, parseDate } from '../../utils/general';
 
 import Avatar from '../Avatar';
@@ -11,9 +13,11 @@ import './style.css';
 
 const EmailList = ({
     emails,
+    isEmailBodyOpen,
     dispatchAddEmails,
     dispatchAddEmailId,
     dispatchAddEmailBody,
+    dispatchOpenEmailBody,
 }) => {
     const [activeEmail, setActiveEmail] = useState(null);
 
@@ -35,19 +39,23 @@ const EmailList = ({
     }, []);
 
     const handleEmailInteraction = (item) => {
+        if (!isEmailBodyOpen) {
+            dispatchOpenEmailBody();
+        }
+
+        dispatchAddEmailId(item.id);
+        dispatchAddEmailBody(item);
+
         window.scrollTo(0, 0);
 
         setActiveEmail(item.id);
 
         const newEmails = markEmailAsRead(emails, item.id);
         dispatchAddEmails(newEmails);
-
-        dispatchAddEmailId(item.id);
-        dispatchAddEmailBody(item);
     };
 
     return (
-        <section className="email-list">
+        <section className={`email-list ${isEmailBodyOpen ? 'email-body-open' : ''}`}>
             <ul>
                 {
                     emails.map((item) => {
@@ -106,19 +114,23 @@ EmailList.propTypes = {
         isRead: PropTypes.bool.isRequired,
         isFavorite: PropTypes.bool.isRequired,
     }).isRequired).isRequired,
+    isEmailBodyOpen: PropTypes.bool.isRequired,
     dispatchAddEmails: PropTypes.func.isRequired,
     dispatchAddEmailId: PropTypes.func.isRequired,
     dispatchAddEmailBody: PropTypes.func.isRequired,
+    dispatchOpenEmailBody: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
     dispatchAddEmails: (emails) => dispatch(addEmails(emails)),
     dispatchAddEmailId: (emailId) => dispatch(addEmailId(emailId)),
     dispatchAddEmailBody: (emailBody) => dispatch(addEmailBody(emailBody)),
+    dispatchOpenEmailBody: () => dispatch(openEmailBody()),
 });
 
 const mapStateToProps = (state) => ({
     emails: state.emails,
+    isEmailBodyOpen: state.isEmailBodyOpen,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmailList);
