@@ -8,19 +8,27 @@
 
 html {
     scroll-behavior: smooth;
+    font-family: 'Varela Round', sans-serif;
 }
 
 body {
-    font-family: 'Varela Round', sans-serif;
     background: #f4f5f9;
     color: #636363;
 }
 
 button {
+    font-family: 'Varela Round', sans-serif;
     cursor: pointer;
     background: none;
     border: none;
     outline: none;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
 }
 
 .container {

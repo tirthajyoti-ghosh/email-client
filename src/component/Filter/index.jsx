@@ -1,5 +1,7 @@
+import './style.css';
+
 const Filter = () => (
-    <section className="filter">
+    <header className="filter">
         <span>Filter By:</span>
 
         <ul className="items">
@@ -13,7 +15,7 @@ const Filter = () => (
                 <button type="button">Favorites</button>
             </li>
         </ul>
-    </section>
+    </header>
 );
 
 export default Filter;
