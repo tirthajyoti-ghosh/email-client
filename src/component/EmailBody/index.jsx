@@ -3,8 +3,12 @@ import DOMPurify from 'dompurify';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { addEmails, addEmailBody } from '../redux/actions/emails';
-import { parseDate, toggleFavoriteStatus } from '../utils/general';
+import { addEmails, addEmailBody } from '../../redux/actions/emails';
+import { parseDate, toggleFavoriteStatus } from '../../utils/general';
+
+import Avatar from '../Avatar';
+
+import './style.css';
 
 const EmailBody = ({
     emails, selectedEmailId, currentEmailBody, dispatchAddEmailBody, dispatchAddEmails,
@@ -29,27 +33,32 @@ const EmailBody = ({
 
     return !currentEmailBody.body ? 'Loading...' : (
         <section className="email-body">
-            <img
-                src={`https://avatars.dicebear.com/api/initials/${currentEmailBody.from.email}.svg`}
-                alt={currentEmailBody.from.email}
-            />
-            <div className="email-body__details">
-                <button type="button" className="mark-favorite-btn" onClick={() => toggleFavorite()}>
-                    Mark as favorite
-                </button>
-                <h1>{currentEmailBody.subject}</h1>
-                <time>{parseDate(currentEmailBody.date)}</time>
+            <div className="container">
+                <Avatar name={currentEmailBody.from.name} />
+                <div className="email-body__details">
+                    {
+                        currentEmailBody.isFavorite
+                            ? <span className="mark-favorite__text">Marked as favorite</span>
+                            : (
+                                <button type="button" className="mark-favorite__btn" onClick={toggleFavorite}>
+                                    Mark as favorite
+                                </button>
+                            )
+                    }
+                    <h1>{currentEmailBody.subject}</h1>
+                    <time>{parseDate(currentEmailBody.date)}</time>
 
-                <div
-                    className="email-body__description"
-                    // eslint-disable-next-line react/no-danger
-                    dangerouslySetInnerHTML={{
-                        __html: DOMPurify.sanitize(
-                            currentEmailBody.body,
-                            { USE_PROFILES: { html: true } },
-                        ),
-                    }}
-                />
+                    <div
+                        className="email-body__description"
+                        // eslint-disable-next-line react/no-danger
+                        dangerouslySetInnerHTML={{
+                            __html: DOMPurify.sanitize(
+                                currentEmailBody.body,
+                                { USE_PROFILES: { html: true } },
+                            ),
+                        }}
+                    />
+                </div>
             </div>
         </section>
     );

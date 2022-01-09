@@ -1,0 +1,40 @@
+.email-body {
+    width: 70%;
+}
+
+.email-body .container {
+    min-height: calc(100vh - 100px - 1.8rem);
+    display: flex;
+    background-color: #fefeff;
+    border: 1px solid #cfd2dc;
+    border-radius: 8px;
+    margin-bottom: 1.8rem;
+    padding: 1.8rem;
+}
+
+.email-body__details .mark-favorite__text,
+.email-body__details .mark-favorite__btn {
+    float: right;
+    font-size: 0.78rem;
+    letter-spacing: 0.03rem;
+    padding: 0.5rem 1rem;
+}
+
+.email-body__details .mark-favorite__btn {
+    background-color: #e54065;
+    border-radius: 4rem;
+    color: #fff;
+}
+
+.email-body__details h1 {
+    margin: 0.5rem 0 1.5rem;
+}
+
+.email-body__details time {
+    margin-bottom: 1.8rem;
+    display: inline-block;
+}
+
+.email-body__details p {
+    margin-bottom: 1.8rem;
+}
