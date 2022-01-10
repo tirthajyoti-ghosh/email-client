@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { addEmails, updateCurrentFilter, updateFilteredEmails } from '../../redux/actions/emails';
 import { filterEmails } from '../../utils/general';
+import { emailListShape } from '../../utils/propTypes';
 
 import './style.css';
 
@@ -57,18 +58,7 @@ const Filter = ({
 };
 
 Filter.propTypes = {
-    emails: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        from: PropTypes.shape({
-            email: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-        }).isRequired,
-        date: PropTypes.number.isRequired,
-        subject: PropTypes.string.isRequired,
-        short_description: PropTypes.string.isRequired,
-        isRead: PropTypes.bool.isRequired,
-        isFavorite: PropTypes.bool.isRequired,
-    }).isRequired).isRequired,
+    emails: emailListShape().isRequired,
     currentFilter: PropTypes.string.isRequired,
     dispatchUpdateCurrentFilter: PropTypes.func.isRequired,
     dispatchUpdateFilteredEmails: PropTypes.func.isRequired,

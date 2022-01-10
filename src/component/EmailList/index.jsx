@@ -14,6 +14,7 @@ import {
     markEmailAsRead,
     parseDate,
 } from '../../utils/general';
+import { emailListShape } from '../../utils/propTypes';
 
 import Avatar from '../Avatar';
 
@@ -112,22 +113,9 @@ const EmailList = ({
     );
 };
 
-const emailShape = () => PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    from: PropTypes.shape({
-        email: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-    }).isRequired,
-    date: PropTypes.number.isRequired,
-    subject: PropTypes.string.isRequired,
-    short_description: PropTypes.string.isRequired,
-    isRead: PropTypes.bool.isRequired,
-    isFavorite: PropTypes.bool.isRequired,
-});
-
 EmailList.propTypes = {
-    emails: PropTypes.arrayOf(emailShape().isRequired).isRequired,
-    filteredEmails: PropTypes.arrayOf(emailShape().isRequired).isRequired,
+    emails: emailListShape().isRequired,
+    filteredEmails: emailListShape().isRequired,
     isEmailBodyOpen: PropTypes.bool.isRequired,
     dispatchAddEmails: PropTypes.func.isRequired,
     dispatchAddEmailId: PropTypes.func.isRequired,

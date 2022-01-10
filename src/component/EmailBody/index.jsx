@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 import { addEmails, addEmailBody, updateFilteredEmails } from '../../redux/actions/emails';
 import { filterEmails, parseDate, toggleFavoriteStatus } from '../../utils/general';
+import { emailListShape, emailShape } from '../../utils/propTypes';
 
 import Avatar from '../Avatar';
 
@@ -83,29 +84,8 @@ EmailBody.propTypes = {
     dispatchAddEmails: PropTypes.func.isRequired,
     isEmailBodyOpen: PropTypes.bool.isRequired,
     dispatchUpdateFilteredEmails: PropTypes.func.isRequired,
-    currentEmailBody: PropTypes.shape({
-        id: PropTypes.string,
-        from: PropTypes.shape({
-            email: PropTypes.string,
-            name: PropTypes.string,
-        }),
-        date: PropTypes.number,
-        subject: PropTypes.string,
-        body: PropTypes.string,
-        isFavorite: PropTypes.bool,
-    }).isRequired,
-    emails: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        from: PropTypes.shape({
-            email: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-        }).isRequired,
-        date: PropTypes.number.isRequired,
-        subject: PropTypes.string.isRequired,
-        short_description: PropTypes.string.isRequired,
-        isRead: PropTypes.bool.isRequired,
-        isFavorite: PropTypes.bool.isRequired,
-    }).isRequired).isRequired,
+    currentEmailBody: emailShape().isRequired,
+    emails: emailListShape().isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
