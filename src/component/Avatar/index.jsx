@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 import './style.css';
@@ -11,4 +11,4 @@ Avatar.propTypes = {
     name: PropTypes.string.isRequired,
 };
 
-export default Avatar;
+export default memo(Avatar);
