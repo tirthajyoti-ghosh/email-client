@@ -3,8 +3,8 @@ import DOMPurify from 'dompurify';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { addEmails, addEmailBody } from '../../redux/actions/emails';
-import { parseDate, toggleFavoriteStatus } from '../../utils/general';
+import { addEmails, addEmailBody, updateFilteredEmails } from '../../redux/actions/emails';
+import { filterEmails, parseDate, toggleFavoriteStatus } from '../../utils/general';
 
 import Avatar from '../Avatar';
 
@@ -15,8 +15,9 @@ const EmailBody = ({
     selectedEmailId,
     isEmailBodyOpen,
     currentEmailBody,
-    dispatchAddEmailBody,
     dispatchAddEmails,
+    dispatchAddEmailBody,
+    dispatchUpdateFilteredEmails,
 }) => {
     useEffect(() => {
         const fetchEmailBody = async () => {
@@ -34,6 +35,9 @@ const EmailBody = ({
         const newEmails = toggleFavoriteStatus(emails, selectedEmailId);
         dispatchAddEmails(newEmails);
         dispatchAddEmailBody({ isFavorite: !currentEmailBody.isFavorite });
+
+        const filteredEmails = filterEmails(emails, 'favorites');
+        dispatchUpdateFilteredEmails(filteredEmails);
     };
 
     return isEmailBodyOpen ? (
@@ -78,6 +82,7 @@ EmailBody.propTypes = {
     dispatchAddEmailBody: PropTypes.func.isRequired,
     dispatchAddEmails: PropTypes.func.isRequired,
     isEmailBodyOpen: PropTypes.bool.isRequired,
+    dispatchUpdateFilteredEmails: PropTypes.func.isRequired,
     currentEmailBody: PropTypes.shape({
         id: PropTypes.string,
         from: PropTypes.shape({
@@ -104,8 +109,11 @@ EmailBody.propTypes = {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    dispatchAddEmailBody: (emailBody) => dispatch(addEmailBody(emailBody)),
     dispatchAddEmails: (emails) => dispatch(addEmails(emails)),
+    dispatchAddEmailBody: (emailBody) => dispatch(addEmailBody(emailBody)),
+    dispatchUpdateFilteredEmails: (filteredEmails) => (
+        dispatch(updateFilteredEmails(filteredEmails))
+    ),
 });
 
 const mapStateToProps = (state) => ({

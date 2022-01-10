@@ -20,6 +20,9 @@
 
 .items li button {
     padding: 0.2rem 1rem;
+}
+
+.items li button.active {
     background-color: #e1e4ea;
     border: 1px solid #cfd2dc;
     border-radius: 50px;

@@ -39,9 +39,29 @@ const isEmailBodyOpen = (state = false, action) => {
     }
 };
 
+const currentFilter = (state = 'unread', action) => {
+    switch (action.type) {
+    case 'UPDATE_CURRENT_FILTER':
+        return action.filter;
+    default:
+        return state;
+    }
+};
+
+const filteredEmails = (state = [], action) => {
+    switch (action.type) {
+    case 'UPDATE_FILTERED_EMAILS':
+        return action.filteredEmails;
+    default:
+        return state;
+    }
+};
+
 export default combineReducers({
     emails,
     selectedEmailId,
     isEmailBodyOpen,
     currentEmailBody,
+    currentFilter,
+    filteredEmails,
 });

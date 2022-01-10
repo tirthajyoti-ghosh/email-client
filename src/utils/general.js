@@ -33,3 +33,18 @@ export const addAdditionalProperties = (arr = [], obj = {}) => {
         ...obj,
     }));
 };
+
+export const filterEmails = (emails, filter) => {
+    const newEmails = [...emails];
+
+    switch (filter) {
+    case 'unread':
+        return newEmails.filter((email) => !email.isRead);
+    case 'read':
+        return newEmails.filter((email) => email.isRead);
+    case 'favorites':
+        return newEmails.filter((email) => email.isFavorite);
+    default:
+        return newEmails;
+    }
+};

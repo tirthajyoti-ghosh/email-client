@@ -16,3 +16,13 @@ export const addEmailBody = (emailBody) => ({
 export const openEmailBody = () => ({
     type: 'OPEN_EMAIL_BODY',
 });
+
+export const updateCurrentFilter = (filter) => ({
+    type: 'UPDATE_CURRENT_FILTER',
+    filter,
+});
+
+export const updateFilteredEmails = (filteredEmails) => ({
+    type: 'UPDATE_FILTERED_EMAILS',
+    filteredEmails,
+});

@@ -3,9 +3,17 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {
-    addEmails, addEmailId, addEmailBody, openEmailBody,
+    addEmails,
+    addEmailId,
+    addEmailBody,
+    openEmailBody,
+    updateFilteredEmails,
 } from '../../redux/actions/emails';
-import { addAdditionalProperties, markEmailAsRead, parseDate } from '../../utils/general';
+import {
+    addAdditionalProperties,
+    markEmailAsRead,
+    parseDate,
+} from '../../utils/general';
 
 import Avatar from '../Avatar';
 
@@ -13,11 +21,13 @@ import './style.css';
 
 const EmailList = ({
     emails,
+    filteredEmails,
     isEmailBodyOpen,
     dispatchAddEmails,
     dispatchAddEmailId,
     dispatchAddEmailBody,
     dispatchOpenEmailBody,
+    dispatchUpdateFilteredEmails,
 }) => {
     const [activeEmail, setActiveEmail] = useState(null);
 
@@ -33,6 +43,7 @@ const EmailList = ({
                 },
             );
             dispatchAddEmails(newData);
+            dispatchUpdateFilteredEmails(newData);
         };
 
         fetchEmails();
@@ -58,7 +69,7 @@ const EmailList = ({
         <section className={`email-list ${isEmailBodyOpen ? 'email-body-open' : ''}`}>
             <ul>
                 {
-                    emails.map((item) => {
+                    filteredEmails.map((item) => {
                         const itemClassName = `email-list__item ${item.isRead ? 'read' : ''} ${activeEmail === item.id ? 'active' : ''}`;
 
                         return (
@@ -101,24 +112,28 @@ const EmailList = ({
     );
 };
 
+const emailShape = () => PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    from: PropTypes.shape({
+        email: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+    }).isRequired,
+    date: PropTypes.number.isRequired,
+    subject: PropTypes.string.isRequired,
+    short_description: PropTypes.string.isRequired,
+    isRead: PropTypes.bool.isRequired,
+    isFavorite: PropTypes.bool.isRequired,
+});
+
 EmailList.propTypes = {
-    emails: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        from: PropTypes.shape({
-            email: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-        }).isRequired,
-        date: PropTypes.number.isRequired,
-        subject: PropTypes.string.isRequired,
-        short_description: PropTypes.string.isRequired,
-        isRead: PropTypes.bool.isRequired,
-        isFavorite: PropTypes.bool.isRequired,
-    }).isRequired).isRequired,
+    emails: PropTypes.arrayOf(emailShape().isRequired).isRequired,
+    filteredEmails: PropTypes.arrayOf(emailShape().isRequired).isRequired,
     isEmailBodyOpen: PropTypes.bool.isRequired,
     dispatchAddEmails: PropTypes.func.isRequired,
     dispatchAddEmailId: PropTypes.func.isRequired,
     dispatchAddEmailBody: PropTypes.func.isRequired,
     dispatchOpenEmailBody: PropTypes.func.isRequired,
+    dispatchUpdateFilteredEmails: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -126,10 +141,14 @@ const mapDispatchToProps = (dispatch) => ({
     dispatchAddEmailId: (emailId) => dispatch(addEmailId(emailId)),
     dispatchAddEmailBody: (emailBody) => dispatch(addEmailBody(emailBody)),
     dispatchOpenEmailBody: () => dispatch(openEmailBody()),
+    dispatchUpdateFilteredEmails: (filteredEmails) => (
+        dispatch(updateFilteredEmails(filteredEmails))
+    ),
 });
 
 const mapStateToProps = (state) => ({
     emails: state.emails,
+    filteredEmails: state.filteredEmails,
     isEmailBodyOpen: state.isEmailBodyOpen,
 });
 

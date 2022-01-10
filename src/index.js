@@ -12,6 +12,8 @@ const initialState = {
     selectedEmailId: '',
     isEmailBodyOpen: false,
     currentEmailBody: {},
+    currentFilter: 'unread',
+    filteredEmails: [],
 };
 
 const store = createStore(
