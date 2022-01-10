@@ -44,7 +44,7 @@ const EmailList = ({
                 },
             );
             dispatchAddEmails(newData);
-            dispatchUpdateFilteredEmails(newData);
+            dispatchUpdateFilteredEmails();
         };
 
         fetchEmails();
@@ -129,9 +129,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatchAddEmailId: (emailId) => dispatch(addEmailId(emailId)),
     dispatchAddEmailBody: (emailBody) => dispatch(addEmailBody(emailBody)),
     dispatchOpenEmailBody: () => dispatch(openEmailBody()),
-    dispatchUpdateFilteredEmails: (filteredEmails) => (
-        dispatch(updateFilteredEmails(filteredEmails))
-    ),
+    dispatchUpdateFilteredEmails: () => dispatch(updateFilteredEmails()),
 });
 
 const mapStateToProps = (state) => ({

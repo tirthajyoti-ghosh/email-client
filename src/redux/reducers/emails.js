@@ -1,9 +1,11 @@
-import { combineReducers } from 'redux';
+import { filterEmails, toggleFavoriteStatus } from '../../utils/general';
 
 const emails = (state = [], action) => {
     switch (action.type) {
     case 'ADD_EMAILS':
         return action.emails;
+    case 'MARK_EMAIL_AS_FAVORITE':
+        return toggleFavoriteStatus(state, action.emailId);
     default:
         return state;
     }
@@ -48,20 +50,20 @@ const currentFilter = (state = 'unread', action) => {
     }
 };
 
-const filteredEmails = (state = [], action) => {
+const filteredEmails = (state = [], action, rootState) => {
     switch (action.type) {
     case 'UPDATE_FILTERED_EMAILS':
-        return action.filteredEmails;
+        return filterEmails(rootState.emails, rootState.currentFilter);
     default:
         return state;
     }
 };
 
-export default combineReducers({
-    emails,
-    selectedEmailId,
-    isEmailBodyOpen,
-    currentEmailBody,
-    currentFilter,
-    filteredEmails,
+export default (state = {}, action) => ({
+    emails: emails(state.emails, action, state),
+    selectedEmailId: selectedEmailId(state.selectedEmailId, action, state),
+    isEmailBodyOpen: isEmailBodyOpen(state.isEmailBodyOpen, action, state),
+    currentEmailBody: currentEmailBody(state.currentEmailBody, action, state),
+    currentFilter: currentFilter(state.currentFilter, action, state),
+    filteredEmails: filteredEmails(state.filteredEmails, action, state),
 });

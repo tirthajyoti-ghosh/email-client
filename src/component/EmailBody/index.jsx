@@ -3,21 +3,21 @@ import DOMPurify from 'dompurify';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { addEmails, addEmailBody, updateFilteredEmails } from '../../redux/actions/emails';
-import { filterEmails, parseDate, toggleFavoriteStatus } from '../../utils/general';
-import { emailListShape, emailShape } from '../../utils/propTypes';
+import { addEmailBody, updateFilteredEmails, markEmailAsFavorite } from '../../redux/actions/emails';
+import { parseDate } from '../../utils/general';
+import { emailShape } from '../../utils/propTypes';
 
 import Avatar from '../Avatar';
 
 import './style.css';
 
 const EmailBody = ({
-    emails,
     selectedEmailId,
+    currentFilter,
     isEmailBodyOpen,
     currentEmailBody,
-    dispatchAddEmails,
     dispatchAddEmailBody,
+    dispatchMarkEmailAsFavorite,
     dispatchUpdateFilteredEmails,
 }) => {
     useEffect(() => {
@@ -33,12 +33,12 @@ const EmailBody = ({
     }, [selectedEmailId]);
 
     const toggleFavorite = () => {
-        const newEmails = toggleFavoriteStatus(emails, selectedEmailId);
-        dispatchAddEmails(newEmails);
+        dispatchMarkEmailAsFavorite(selectedEmailId);
         dispatchAddEmailBody({ isFavorite: !currentEmailBody.isFavorite });
 
-        const filteredEmails = filterEmails(emails, 'favorites');
-        dispatchUpdateFilteredEmails(filteredEmails);
+        if (currentFilter === 'favorites') {
+            dispatchUpdateFilteredEmails();
+        }
     };
 
     return isEmailBodyOpen ? (
@@ -79,21 +79,19 @@ const EmailBody = ({
 };
 
 EmailBody.propTypes = {
+    currentFilter: PropTypes.string.isRequired,
     selectedEmailId: PropTypes.string.isRequired,
     dispatchAddEmailBody: PropTypes.func.isRequired,
-    dispatchAddEmails: PropTypes.func.isRequired,
     isEmailBodyOpen: PropTypes.bool.isRequired,
+    dispatchMarkEmailAsFavorite: PropTypes.func.isRequired,
     dispatchUpdateFilteredEmails: PropTypes.func.isRequired,
     currentEmailBody: emailShape().isRequired,
-    emails: emailListShape().isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    dispatchAddEmails: (emails) => dispatch(addEmails(emails)),
     dispatchAddEmailBody: (emailBody) => dispatch(addEmailBody(emailBody)),
-    dispatchUpdateFilteredEmails: (filteredEmails) => (
-        dispatch(updateFilteredEmails(filteredEmails))
-    ),
+    dispatchUpdateFilteredEmails: () => dispatch(updateFilteredEmails()),
+    dispatchMarkEmailAsFavorite: (emailId) => dispatch(markEmailAsFavorite(emailId)),
 });
 
 const mapStateToProps = (state) => ({
@@ -101,6 +99,7 @@ const mapStateToProps = (state) => ({
     selectedEmailId: state.selectedEmailId,
     isEmailBodyOpen: state.isEmailBodyOpen,
     currentEmailBody: state.currentEmailBody,
+    currentFilter: state.currentFilter,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmailBody);

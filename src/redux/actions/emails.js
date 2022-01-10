@@ -26,3 +26,8 @@ export const updateFilteredEmails = (filteredEmails) => ({
     type: 'UPDATE_FILTERED_EMAILS',
     filteredEmails,
 });
+
+export const markEmailAsFavorite = (emailId) => ({
+    type: 'MARK_EMAIL_AS_FAVORITE',
+    emailId,
+});
