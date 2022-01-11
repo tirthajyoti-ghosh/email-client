@@ -38,10 +38,16 @@ const EmailList = ({
 
     useEffect(() => {
         const fetchEmails = async () => {
-            const response = await fetch(`https://flipkart-email-mock.vercel.app/?page=${currentPage}`);
-            const { list: data } = await response.json();
+            let data = emails[currentPage];
+            if (!emails[currentPage]) {
+                const response = await fetch(`https://flipkart-email-mock.vercel.app/?page=${currentPage}`);
+                const dataList = await response.json();
+
+                data = dataList.list;
+            }
 
             let newData;
+
             const storedEmailsFilterState = localStorage.getItem('emails');
             if (storedEmailsFilterState) {
                 const persistedState = JSON.parse(storedEmailsFilterState);
@@ -63,6 +69,7 @@ const EmailList = ({
                     };
                 });
 
+                // Update localStorage with new email filter states.
                 localStorage.setItem('emails', JSON.stringify(persistedState));
             } else {
                 newData = addAdditionalProperties(
@@ -80,9 +87,7 @@ const EmailList = ({
             dispatchUpdateFilteredEmails();
         };
 
-        if (!emails[currentPage]) {
-            fetchEmails();
-        }
+        fetchEmails();
     }, [currentPage]);
 
     const handleEmailInteraction = (item) => {
