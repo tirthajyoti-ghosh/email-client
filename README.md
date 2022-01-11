@@ -15,7 +15,7 @@
   <h3 align="center">Email client</h3>
 
   <p align="center">
-    Email client
+    Email client to view, filter, and mark email as favorite.
     <br />
     <a href="https://github.com/tirthajyoti-ghosh/email-client"><strong>Explore the docs »</strong></a>
     <br />
