@@ -42,13 +42,28 @@ const EmailList = ({
             const { list: data } = await response.json();
 
             let newData;
-            if (localStorage.getItem('emails')) {
-                const persistedState = JSON.parse(localStorage.getItem('emails'));
+            const storedEmailsFilterState = localStorage.getItem('emails');
+            if (storedEmailsFilterState) {
+                const persistedState = JSON.parse(storedEmailsFilterState);
 
-                newData = data.map((email) => ({
-                    ...email,
-                    ...persistedState[email.id],
-                }));
+                newData = data.map((email) => {
+                    // If filter state of this email is not present in localStorage,
+                    // then mutate `persistedState` to include default filter state with email id.
+                    if (!persistedState[email.id]) {
+                        persistedState[email.id] = {
+                            id: email.id,
+                            isRead: false,
+                            isFavorite: false,
+                        };
+                    }
+
+                    return {
+                        ...email,
+                        ...persistedState[email.id],
+                    };
+                });
+
+                localStorage.setItem('emails', JSON.stringify(persistedState));
             } else {
                 newData = addAdditionalProperties(
                     data,
