@@ -14,4 +14,4 @@ export const emailShape = () => PropTypes.shape({
     isFavorite: PropTypes.bool,
 });
 
-export const emailListShape = () => PropTypes.arrayOf(emailShape().isRequired);
+export const emailListShape = () => PropTypes.objectOf(PropTypes.arrayOf(emailShape().isRequired));

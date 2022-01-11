@@ -7,12 +7,12 @@ import {
     addEmailId,
     addEmailBody,
     openEmailBody,
+    markEmailAsRead,
     updateFilteredEmails,
 } from '../../redux/actions/emails';
 import {
-    addAdditionalProperties,
-    markEmailAsRead,
     parseDate,
+    addAdditionalProperties,
 } from '../../utils/general';
 import { emailListShape } from '../../utils/propTypes';
 
@@ -23,19 +23,21 @@ import Pagination from '../Pagination';
 
 const EmailList = ({
     emails,
+    currentPage,
     filteredEmails,
     isEmailBodyOpen,
     dispatchAddEmails,
     dispatchAddEmailId,
     dispatchAddEmailBody,
     dispatchOpenEmailBody,
+    dispatchMarkEmailsAsRead,
     dispatchUpdateFilteredEmails,
 }) => {
     const [activeEmail, setActiveEmail] = useState(null);
 
     useEffect(() => {
         const fetchEmails = async () => {
-            const response = await fetch('https://flipkart-email-mock.vercel.app/');
+            const response = await fetch(`https://flipkart-email-mock.vercel.app/?page=${currentPage}`);
             const data = await response.json();
             const newData = addAdditionalProperties(
                 data.list,
@@ -48,8 +50,10 @@ const EmailList = ({
             dispatchUpdateFilteredEmails();
         };
 
-        fetchEmails();
-    }, []);
+        if (!emails[currentPage]) {
+            fetchEmails();
+        }
+    }, [currentPage]);
 
     const handleEmailInteraction = (item) => {
         if (!isEmailBodyOpen) {
@@ -63,15 +67,16 @@ const EmailList = ({
 
         setActiveEmail(item.id);
 
-        const newEmails = markEmailAsRead(emails, item.id);
-        dispatchAddEmails(newEmails);
+        dispatchMarkEmailsAsRead(item.id);
     };
+
+    const emailsArray = filteredEmails[currentPage] || [];
 
     return (
         <section className={`email-list ${isEmailBodyOpen ? 'email-body-open' : ''}`}>
             <ul>
                 {
-                    filteredEmails.map((item) => {
+                    emailsArray.map((item) => {
                         const itemClassName = `email-list__item ${item.isRead ? 'read' : ''} ${activeEmail === item.id ? 'active' : ''}`;
 
                         return (
@@ -118,12 +123,14 @@ const EmailList = ({
 
 EmailList.propTypes = {
     emails: emailListShape().isRequired,
+    currentPage: PropTypes.number.isRequired,
     filteredEmails: emailListShape().isRequired,
     isEmailBodyOpen: PropTypes.bool.isRequired,
     dispatchAddEmails: PropTypes.func.isRequired,
     dispatchAddEmailId: PropTypes.func.isRequired,
     dispatchAddEmailBody: PropTypes.func.isRequired,
     dispatchOpenEmailBody: PropTypes.func.isRequired,
+    dispatchMarkEmailsAsRead: PropTypes.func.isRequired,
     dispatchUpdateFilteredEmails: PropTypes.func.isRequired,
 };
 
@@ -132,11 +139,13 @@ const mapDispatchToProps = (dispatch) => ({
     dispatchAddEmailId: (emailId) => dispatch(addEmailId(emailId)),
     dispatchAddEmailBody: (emailBody) => dispatch(addEmailBody(emailBody)),
     dispatchOpenEmailBody: () => dispatch(openEmailBody()),
+    dispatchMarkEmailsAsRead: (emailId) => dispatch(markEmailAsRead(emailId)),
     dispatchUpdateFilteredEmails: () => dispatch(updateFilteredEmails()),
 });
 
 const mapStateToProps = (state) => ({
     emails: state.emails,
+    currentPage: state.currentPage,
     filteredEmails: state.filteredEmails,
     isEmailBodyOpen: state.isEmailBodyOpen,
 });

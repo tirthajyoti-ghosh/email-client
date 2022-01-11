@@ -1,8 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
+import { updateCurrentPage } from '../../redux/actions/emails';
 
 import './style.css';
 
-const Pagination = () => (
+const Pagination = ({ currentPage, dispatchUpdateCurrentPage }) => (
     <div>
         <div className="pagination">
             <ul>
@@ -15,7 +19,16 @@ const Pagination = () => (
 
                 {[1, 2].map((item) => (
                     <li key={item}>
-                        <button type="button" className="is-active">{item}</button>
+                        <button
+                            type="button"
+                            className={currentPage === item ? 'is-active' : ''}
+                            onClick={() => {
+                                window.scrollTo(0, 0);
+                                dispatchUpdateCurrentPage(item);
+                            }}
+                        >
+                            {item}
+                        </button>
                     </li>
                 ))}
 
@@ -30,4 +43,17 @@ const Pagination = () => (
     </div>
 );
 
-export default Pagination;
+Pagination.propTypes = {
+    currentPage: PropTypes.number.isRequired,
+    dispatchUpdateCurrentPage: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+    currentPage: state.currentPage,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    dispatchUpdateCurrentPage: (currentPage) => dispatch(updateCurrentPage(currentPage)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Pagination);

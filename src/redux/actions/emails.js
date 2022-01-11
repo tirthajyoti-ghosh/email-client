@@ -31,3 +31,13 @@ export const markEmailAsFavorite = (emailId) => ({
     type: 'MARK_EMAIL_AS_FAVORITE',
     emailId,
 });
+
+export const markEmailAsRead = (emailId) => ({
+    type: 'MARK_EMAIL_AS_READ',
+    emailId,
+});
+
+export const updateCurrentPage = (currentPage) => ({
+    type: 'UPDATE_CURRENT_PAGE',
+    currentPage,
+});

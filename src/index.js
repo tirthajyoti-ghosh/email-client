@@ -8,12 +8,13 @@ import reportWebVitals from './reportWebVitals';
 import reducer from './redux/reducers/emails';
 
 const initialState = {
-    emails: [],
+    emails: {},
+    currentPage: 1,
     selectedEmailId: '',
     isEmailBodyOpen: false,
     currentEmailBody: {},
     currentFilter: 'unread',
-    filteredEmails: [],
+    filteredEmails: {},
 };
 
 const store = createStore(
