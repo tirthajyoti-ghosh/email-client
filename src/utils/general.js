@@ -48,3 +48,32 @@ export const filterEmails = (emails, filter) => {
         return newEmails;
     }
 };
+
+export const arrayToObject = (arr = [], key) => {
+    const newObj = {};
+
+    arr.forEach((item) => {
+        newObj[item[key]] = item;
+    });
+
+    return newObj;
+};
+
+export const removePropertiesFromObject = (obj = {}, properties = []) => {
+    const newObj = { ...obj };
+
+    properties.forEach((property) => {
+        delete newObj[property];
+    });
+
+    return newObj;
+};
+
+export const convertEmailsArrToLocalStorage = (emails = []) => {
+    const newEmails = [...emails];
+
+    const emailsWithRemovedProps = newEmails.map((email) => (
+        removePropertiesFromObject(email, ['date', 'from', 'short_description', 'subject'])));
+
+    return arrayToObject(emailsWithRemovedProps, 'id');
+};

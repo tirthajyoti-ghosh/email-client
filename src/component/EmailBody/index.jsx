@@ -39,6 +39,17 @@ const EmailBody = ({
         if (currentFilter === 'favorites') {
             dispatchUpdateFilteredEmails();
         }
+
+        // A 0ms timeout is used to ensure that the main thread is not blocked
+        // as localStorage is synchronous and takes time to update
+        setTimeout(() => {
+            if (localStorage.getItem('emails')) {
+                const persistedState = JSON.parse(localStorage.getItem('emails'));
+
+                persistedState[selectedEmailId].isFavorite = !currentEmailBody.isFavorite;
+                localStorage.setItem('emails', JSON.stringify(persistedState));
+            }
+        }, 0);
     };
 
     return isEmailBodyOpen ? (

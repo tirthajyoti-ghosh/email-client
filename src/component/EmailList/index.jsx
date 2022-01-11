@@ -13,6 +13,7 @@ import {
 import {
     parseDate,
     addAdditionalProperties,
+    convertEmailsArrToLocalStorage,
 } from '../../utils/general';
 import { emailListShape } from '../../utils/propTypes';
 
@@ -38,14 +39,28 @@ const EmailList = ({
     useEffect(() => {
         const fetchEmails = async () => {
             const response = await fetch(`https://flipkart-email-mock.vercel.app/?page=${currentPage}`);
-            const data = await response.json();
-            const newData = addAdditionalProperties(
-                data.list,
-                {
-                    isRead: false,
-                    isFavorite: false,
-                },
-            );
+            const { list: data } = await response.json();
+
+            let newData;
+            if (localStorage.getItem('emails')) {
+                const persistedState = JSON.parse(localStorage.getItem('emails'));
+
+                newData = data.map((email) => ({
+                    ...email,
+                    ...persistedState[email.id],
+                }));
+            } else {
+                newData = addAdditionalProperties(
+                    data,
+                    {
+                        isRead: false,
+                        isFavorite: false,
+                    },
+                );
+
+                localStorage.setItem('emails', JSON.stringify(convertEmailsArrToLocalStorage(newData)));
+            }
+
             dispatchAddEmails(newData);
             dispatchUpdateFilteredEmails();
         };
@@ -68,6 +83,17 @@ const EmailList = ({
         setActiveEmail(item.id);
 
         dispatchMarkEmailsAsRead(item.id);
+
+        // A 0ms timeout is used to ensure that the main thread is not blocked
+        // as localStorage is synchronous and takes time to update
+        setTimeout(() => {
+            if (localStorage.getItem('emails')) {
+                const persistedState = JSON.parse(localStorage.getItem('emails'));
+
+                persistedState[item.id].isRead = true;
+                localStorage.setItem('emails', JSON.stringify(persistedState));
+            }
+        }, 0);
     };
 
     const emailsArray = filteredEmails[currentPage] || [];
