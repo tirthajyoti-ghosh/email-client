@@ -1,70 +1,170 @@
-# Getting Started with Create React App
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![License: MIT][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<!-- PROJECT LOGO -->
+<br />
+<p align="center">
+  <a href="https://github.com/tirthajyoti-ghosh/email-client">
+    <img src="./public/icon.png" alt="Logo" width="80" height="80">
+  </a>
 
-## Available Scripts
+  <h3 align="center">Email client</h3>
 
-In the project directory, you can run:
+  <p align="center">
+    Email client to view, filter, and mark email as favorite.
+    <br />
+    <a href="https://github.com/tirthajyoti-ghosh/email-client"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://ghosh-email-client.netlify.app/">View Demo</a>
+    ·
+    <a href="https://github.com/tirthajyoti-ghosh/email-client/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/tirthajyoti-ghosh/email-client/issues">Request Feature</a>
+  </p>
+</p>
 
-### `yarn start`
+<!-- TABLE OF CONTENTS -->
+## Table of Contents
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+* [About the Project](#about-the-project)
+  * [Built With](#built-with)
+* [Getting Started](#getting-started)
+  * [Prerequisites](#prerequisites)
+  * [Installation](#installation)
+* [Roadmap](#roadmap)
+* [Contributing](#contributing)
+* [License](#license)
+* [Contact](#contact)
+* [Acknowledgements](#acknowledgements)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+<!-- ABOUT THE PROJECT -->
+## About The Project
 
-### `yarn test`
+A Single Page email client application to show a list of emails, view email body and filter emails.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![image](https://user-images.githubusercontent.com/57726348/148981205-57af9a49-1cd2-40fc-b873-0449314615a8.png)
+![image](https://user-images.githubusercontent.com/57726348/148986731-b57f9043-40ba-46bf-86af-f8c0282e3618.png)
 
-### `yarn build`
+#### Features:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+* Display list of emails
+* View email body by clicking on each email
+* Mark an email as "Favorite"
+* Filter emails by "Unread", "Read" and "Favorite"
+* Pagination
+* Persist email filter ("unread", "read" and "favorite") state in local storage
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Built With
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* React
+* Redux
+* CSS
+* DOMPurify
+* ESLint
+* Stylelint
+* [Netlify](https://ghosh-email-client.netlify.app/)
 
-### `yarn eject`
+## Live demo
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Deployed to Netlify - [live demo](https://ghosh-email-client.netlify.app/).
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<!-- GETTING STARTED -->
+## Getting Started
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+To get a local copy up and running follow these simple steps.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Prerequisites
 
-## Learn More
+* npm
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    ```sh
+    npm install npm@latest -g
+    ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Installation
 
-### Code Splitting
+1. Clone the repo
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+    ```sh
+    git clone https://github.com/tirthajyoti-ghosh/email-client.git
+    ```
 
-### Analyzing the Bundle Size
+2. Change directory
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+    ```sh
+    cd email-client
+    ```
 
-### Making a Progressive Web App
+3. Install NPM packages
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+    ```sh
+    npm install
+    ```
 
-### Advanced Configuration
+4. Start the local server
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+    ```sh
+    npm start
+    ```
 
-### Deployment
+<!-- ROADMAP -->
+## Roadmap
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+* Make app responsive
+* Refactor to make code DRY
+* Add tests
 
-### `yarn build` fails to minify
+Check the [issues](https://github.com/tirthajyoti-ghosh/email-client/issues).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<!-- CONTRIBUTING -->
+## Contributing
+
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+<!-- LICENSE -->
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+<!-- CONTACT -->
+## Contact
+
+👤 **Tirthajyoti Ghosh**
+
+* Website: [ghosh.tech](https://ghosh.tech)
+* GitHub - [@tirthajyoti-ghosh](https://github.com/tirthajyoti-ghosh)
+* Twitter - [@terrific_ghosh](https://twitter.com/terrific_ghosh)
+* LinkedIn - [@tirthajyoti-ghosh](https://www.linkedin.com/in/tirthajyoti-ghosh/)
+
+<!-- ACKNOWLEDGEMENTS -->
+## Acknowledgements
+
+* <a target="_blank" href="https://icons8.com/icon/bqI4gOgp4z1f/email-open">README</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+* [Img Shields](https://shields.io)
+* [Font Awesome](https://fontawesome.com)
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/tirthajyoti-ghosh/email-client.svg?style=flat-square
+[contributors-url]: https://github.com/tirthajyoti-ghosh/email-client/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/tirthajyoti-ghosh/email-client.svg?style=flat-square
+[forks-url]: https://github.com/tirthajyoti-ghosh/email-client/network/members
+[stars-shield]: https://img.shields.io/github/stars/tirthajyoti-ghosh/email-client.svg?style=flat-square
+[stars-url]: https://github.com/tirthajyoti-ghosh/email-client/stargazers
+[issues-shield]: https://img.shields.io/github/issues/tirthajyoti-ghosh/email-client.svg?style=flat-square
+[issues-url]: https://github.com/tirthajyoti-ghosh/email-client/issues
+[license-shield]: https://img.shields.io/badge/License-MIT-yellow.svg
+[license-url]: https://github.com/tirthajyoti-ghosh/email-client/blob/development/LICENSE
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
+[linkedin-url]: https://www.linkedin.com/in/tirthajyoti-ghosh/
