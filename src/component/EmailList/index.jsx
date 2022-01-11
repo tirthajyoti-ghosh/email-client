@@ -19,6 +19,7 @@ import { emailListShape } from '../../utils/propTypes';
 import Avatar from '../Avatar';
 
 import './style.css';
+import Pagination from '../Pagination';
 
 const EmailList = ({
     emails,
@@ -109,6 +110,8 @@ const EmailList = ({
                     })
                 }
             </ul>
+
+            <Pagination />
         </section>
     );
 };
